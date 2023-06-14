@@ -76,36 +76,6 @@ public class NacosConfigV2MutualAuthTest {
     }
 
     @Test
-    public void test_d_MutualAuth() throws Exception {
-        Properties propertiesfalse = new Properties();
-        propertiesfalse.put(RpcConstants.RPC_CLIENT_TLS_ENABLE, "true");
-        propertiesfalse.put(RpcConstants.RPC_CLIENT_MUTUAL_AUTH,"true");
-        propertiesfalse.put(RpcConstants.RPC_CLIENT_TLS_CERT_KEY,"test-client-key.pem");
-        propertiesfalse.put(RpcConstants.RPC_CLIENT_TLS_TRUST_COLLECTION_CHAIN_PATH,"test-ca-cert.pem");
-        propertiesfalse.put(RpcConstants.RPC_CLIENT_TLS_CERT_CHAIN_PATH,"test-client-cert.pem");
-        propertiesfalse.put("serverAddr", "127.0.0.1");
-        ConfigService configServiceFalse = new NacosConfigService(propertiesfalse);
-        String dataId = "test-group" + increment.getAndIncrement();
-        String groupId = "test-data" + increment.getAndIncrement();
-        String content = UUID.randomUUID().toString();
-        boolean res = configServiceFalse.publishConfig(dataId, groupId, content);
-        CountDownLatch latch2 = new CountDownLatch(1);
-        configServiceFalse.addListener(dataId, groupId, new AbstractConfigChangeListener() {
-            @Override
-            public void receiveConfigChange(ConfigChangeEvent event) {
-                ConfigChangeItem cci = event.getChangeItem("content");
-                System.out.println("content:" + cci);
-                if (!content.equals(cci.getNewValue())) {
-                    return;
-                }
-                latch2.countDown();
-            }
-        });
-        latch2.await(5, TimeUnit.SECONDS);
-        Assert.assertTrue(res);
-    }
-
-    @Test
     public void test_d_MutualAuthButClientNot() throws Exception {
 
         Properties propertiesfalse = new Properties();

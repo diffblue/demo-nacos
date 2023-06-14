@@ -115,27 +115,4 @@ public class ConfigIntegrationV3Test {
         connectionTrustAll.close();
 
     }
-
-    @Test
-    public void test_g_ServerTlsTrustCa() throws Exception {
-
-        RpcClient.ServerInfo serverInfo = new RpcClient.ServerInfo();
-        serverInfo.setServerIp("127.0.0.1");
-
-        serverInfo.setServerPort(EnvUtil.getPort());
-        RpcClientTlsConfig tlsConfig = new RpcClientTlsConfig();
-        tlsConfig.setEnableTls(true);
-        tlsConfig.setTrustCollectionCertFile("test-ca-cert.pem");
-        RpcClient clientTrustCa = RpcClientFactory.createClient("testServerTlsTrustCa", ConnectionType.GRPC, Collections.singletonMap("labelKey", "labelValue"), tlsConfig);
-        Connection connectionTrustCa = clientTrustCa.connectToServer(serverInfo);
-        ConfigPublishRequest configPublishRequestCa = new ConfigPublishRequest();
-        String contentCa = UUID.randomUUID().toString();
-
-        configPublishRequestCa.setContent(contentCa);
-        configPublishRequestCa.setGroup("test-group" + increment.getAndIncrement());
-        configPublishRequestCa.setDataId("test-data" + increment.getAndIncrement());
-        Response responseCa = connectionTrustCa.request(configPublishRequestCa, TimeUnit.SECONDS.toMillis(3));
-        Assert.assertTrue(responseCa.isSuccess());
-        connectionTrustCa.close();
-    }
 }

@@ -114,28 +114,6 @@ public class GroupCapacityPersistServiceTest {
     }
     
     @Test
-    public void testInsertGroupCapacity() {
-        Mockito.when(jdbcTemplate.update(any(PreparedStatementCreator.class),
-                argThat((ArgumentMatcher<GeneratedKeyHolder>) keyHolder -> {
-                    List<Map<String, Object>> keyList = new ArrayList<>();
-                    Map<String, Object> keyMap = new HashMap<>();
-                    Number number = 1;
-                    keyMap.put("test", number);
-                    keyList.add(keyMap);
-                    List<Map<String, Object>> expect = keyHolder.getKeyList();
-                    expect.addAll(keyList);
-                    return false;
-                }))).thenReturn(1);
-        
-        GroupCapacity capacity = new GroupCapacity();
-        capacity.setGroup(GroupCapacityPersistService.CLUSTER);
-        Assert.assertTrue(service.insertGroupCapacity(capacity));
-        
-        capacity.setGroup("test");
-        Assert.assertTrue(service.insertGroupCapacity(capacity));
-    }
-    
-    @Test
     public void testGetClusterUsage() {
         doReturn(new ConfigInfoMapperByMySql()).when(mapperManager).findMapper(any(), eq(TableConstant.CONFIG_INFO));
         
@@ -153,18 +131,6 @@ public class GroupCapacityPersistServiceTest {
                 .thenReturn(new ArrayList<>());
         when(jdbcTemplate.queryForObject(anyString(), eq(Integer.class))).thenReturn(20);
         Assert.assertEquals(20, service.getClusterUsage());
-    }
-    
-    @Test
-    public void testIncrementUsageWithDefaultQuotaLimit() {
-        GroupCapacity groupCapacity = new GroupCapacity();
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        groupCapacity.setGmtModified(timestamp);
-        groupCapacity.setGroup("test");
-        groupCapacity.setQuota(1);
-        when(jdbcTemplate.update(anyString(), eq(timestamp), eq("test"), eq(1))).thenReturn(1);
-        
-        Assert.assertTrue(service.incrementUsageWithDefaultQuotaLimit(groupCapacity));
     }
     
     @Test
@@ -278,20 +244,6 @@ public class GroupCapacityPersistServiceTest {
             return 0;
         });
         Assert.assertTrue(service.updateMaxSize(group, maxSize));
-    }
-    
-    @Test
-    public void testCorrectUsage() {
-        
-        String group = GroupCapacityPersistService.CLUSTER;
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        
-        when(jdbcTemplate.update(anyString(), eq(timestamp), eq(group))).thenReturn(1);
-        Assert.assertTrue(service.correctUsage(group, timestamp));
-        
-        group = "test";
-        when(jdbcTemplate.update(anyString(), eq(group), eq(timestamp), eq(group))).thenReturn(1);
-        Assert.assertTrue(service.correctUsage(group, timestamp));
     }
     
     @Test

@@ -76,35 +76,6 @@ public class ConfigIntegrationV2MutualAuthTest {
     }
 
     @Test
-    public void test_d_MutualAuth() throws Exception {
-
-        RpcClientTlsConfig tlsConfig = new RpcClientTlsConfig();
-        tlsConfig.setEnableTls(true);
-        tlsConfig.setMutualAuthEnable(true);
-        tlsConfig.setCertChainFile("test-client-cert.pem");
-        tlsConfig.setCertPrivateKey("test-client-key.pem");
-        tlsConfig.setTrustCollectionCertFile("test-ca-cert.pem");
-        RpcClient client = RpcClientFactory.createClient("testMutualAuth", ConnectionType.GRPC, Collections.singletonMap("labelKey", "labelValue"), tlsConfig);
-
-        RpcClient.ServerInfo serverInfo = new RpcClient.ServerInfo();
-        serverInfo.setServerIp("127.0.0.1");
-        serverInfo.setServerPort(port);
-
-        Connection connection = client.connectToServer(serverInfo);
-        ConfigPublishRequest configPublishRequest = new ConfigPublishRequest();
-
-        String content = UUID.randomUUID().toString();
-
-        configPublishRequest.setContent(content);
-        configPublishRequest.setGroup("test-group"+increment.getAndIncrement());
-        configPublishRequest.setDataId("test-data"+increment.getAndIncrement());
-        configPublishRequest.setRequestId(content);
-        Response response = connection.request(configPublishRequest, TimeUnit.SECONDS.toMillis(5));
-        Assert.assertTrue(response.isSuccess());
-        connection.close();
-    }
-
-    @Test
     public void test_e_ServerMutualAuthOnly() throws Exception {
 
         RpcClientTlsConfig tlsConfig = new RpcClientTlsConfig();

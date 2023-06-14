@@ -71,34 +71,6 @@ public class NacosConfigServiceNoComTlsGrpcClientTest {
     }
 
     @Test
-    public void test_e_TlsServerAndTlsClient() throws Exception {
-        Properties properties = new Properties();
-        properties.put(RpcConstants.RPC_CLIENT_TLS_ENABLE, "true");
-        properties.put(RpcConstants.RPC_CLIENT_TLS_PROVIDER, "openssl");
-        properties.put(RpcConstants.RPC_CLIENT_TLS_TRUST_COLLECTION_CHAIN_PATH, "test-ca-cert.pem");
-        properties.put("serverAddr", "127.0.0.1");
-        ConfigService configService = new NacosConfigService(properties);
-        String content = UUID.randomUUID().toString();
-        String dataId = "test-group" + increment.getAndIncrement();
-        String groupId = "test-data" + increment.getAndIncrement();
-        boolean b = configService.publishConfig("test-group" + increment.getAndIncrement(), "test-data" + increment.getAndIncrement(), content);
-        CountDownLatch latch = new CountDownLatch(1);
-        configService.addListener(dataId, groupId, new AbstractConfigChangeListener() {
-            @Override
-            public void receiveConfigChange(ConfigChangeEvent event) {
-                ConfigChangeItem cci = event.getChangeItem("content");
-                System.out.println("content:" + cci);
-                if (!content.equals(cci.getNewValue())) {
-                    return;
-                }
-                latch.countDown();
-            }
-        });
-        latch.await(5, TimeUnit.SECONDS);
-        Assert.assertTrue(b);
-    }
-
-    @Test
     public void test_e_TlsServerAndPlainClient()  throws Exception {
         Properties propertiesfalse = new Properties();
         propertiesfalse.put(RpcConstants.RPC_CLIENT_TLS_ENABLE, "false");

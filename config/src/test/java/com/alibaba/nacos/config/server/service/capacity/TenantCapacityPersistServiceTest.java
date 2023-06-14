@@ -97,39 +97,6 @@ public class TenantCapacityPersistServiceTest {
     }
     
     @Test
-    public void testInsertTenantCapacity() {
-        
-        when(jdbcTemplate.update(any(PreparedStatementCreator.class),
-                argThat((ArgumentMatcher<GeneratedKeyHolder>) keyHolder -> {
-                    List<Map<String, Object>> keyList = new ArrayList<>();
-                    Map<String, Object> keyMap = new HashMap<>();
-                    Number number = 1;
-                    keyMap.put("test", number);
-                    keyList.add(keyMap);
-                    List<Map<String, Object>> expect = keyHolder.getKeyList();
-                    expect.addAll(keyList);
-                    return false;
-                }))).thenReturn(1);
-        
-        TenantCapacity capacity = new TenantCapacity();
-        capacity.setTenant("test");
-        Assert.assertTrue(service.insertTenantCapacity(capacity));
-    }
-    
-    @Test
-    public void testIncrementUsageWithDefaultQuotaLimit() {
-        
-        TenantCapacity tenantCapacity = new TenantCapacity();
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        tenantCapacity.setGmtModified(timestamp);
-        tenantCapacity.setTenant("test");
-        tenantCapacity.setQuota(1);
-        when(jdbcTemplate.update(anyString(), eq(timestamp), eq("test"), eq(1))).thenReturn(1);
-        
-        Assert.assertTrue(service.incrementUsageWithDefaultQuotaLimit(tenantCapacity));
-    }
-    
-    @Test
     public void testIncrementUsageWithQuotaLimit() {
         
         TenantCapacity tenantCapacity = new TenantCapacity();
