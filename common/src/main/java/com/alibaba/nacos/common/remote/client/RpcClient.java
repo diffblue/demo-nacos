@@ -394,7 +394,7 @@ public abstract class RpcClient implements Closeable {
         
     }
     
-    class ConnectResetRequestHandler implements ServerRequestHandler {
+    protected class ConnectResetRequestHandler implements ServerRequestHandler {
         
         @Override
         public Response requestReply(Request request) {
@@ -1003,7 +1003,7 @@ public abstract class RpcClient implements Closeable {
         return rpcClientConfig.labels();
     }
     
-    class ReconnectContext {
+    protected class ReconnectContext {
         
         public ReconnectContext(ServerInfo serverInfo, boolean onRequestFail) {
             this.onRequestFail = onRequestFail;

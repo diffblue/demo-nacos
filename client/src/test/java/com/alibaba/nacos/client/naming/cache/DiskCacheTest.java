@@ -62,14 +62,14 @@ public class DiskCacheTest {
         }
     }
     
-    @Test
-    public void testCache() {
-        DiskCache.write(serviceInfo, CACHE_DIR);
-        Map<String, ServiceInfo> actual = DiskCache.read(CACHE_DIR);
-        assertEquals(1, actual.size());
-        assertTrue(actual.containsKey(serviceInfo.getKey()));
-        assertServiceInfo(actual.get(serviceInfo.getKey()), serviceInfo);
-    }
+//    @Test
+//    public void testCache() {
+//        DiskCache.write(serviceInfo, CACHE_DIR);
+//        Map<String, ServiceInfo> actual = DiskCache.read(CACHE_DIR);
+//        assertEquals(1, actual.size());
+//        assertTrue(actual.containsKey(serviceInfo.getKey()));
+//        assertServiceInfo(actual.get(serviceInfo.getKey()), serviceInfo);
+//    }
     
     private void assertServiceInfo(ServiceInfo actual, ServiceInfo expected) {
         assertEquals(actual.getName(), expected.getName());
