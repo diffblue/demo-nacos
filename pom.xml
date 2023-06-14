@@ -202,6 +202,19 @@
                             <goal>enforce</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                <version>[1.8,12)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration>
                     <rules>
